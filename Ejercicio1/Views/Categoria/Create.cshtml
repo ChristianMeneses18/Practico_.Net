@@ -1,0 +1,15 @@
+﻿@model Ejercicio1.Models.Categoria
+
+<div class="container">
+    <h4 class="blue-text text-darken-2">Crear Categoría</h4>
+
+    <form asp-action="Create" class="col s12">
+        <div class="input-field">
+            <input asp-for="Nombre" id="nombre" type="text" class="validate" />
+            <label for="nombre">Nombre</label>
+            <span asp-validation-for="Nombre" class="red-text text-darken-1"></span>
+        </div>
+
+        <button type="submit" class="btn blue darken-2">Guardar</button>
+    </form>
+</div>

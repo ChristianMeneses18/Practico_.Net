@@ -20,6 +20,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+                        <th>Fecha de Creacion</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +30,13 @@
                         <tr>
                             <td>@cat.Id</td>
                             <td>@cat.Nombre</td>
+                            <td>@cat.FechaCreacion</td>
+                            <td>
+                                <a class="btn-small orange modal-trigger edit-button" href="#modalEditar" data-id="@cat.Id"> <i class="material-icons">edit</i></a>
+                            </td>
+                            <td>
+                                <a class="btn-small red delete" data-id="@cat.Id"><i class="material-icons">delete</i></a>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -35,3 +44,55 @@
         </div>
     </div>
 </div>
+
+<div id="modalEditar" class="modal">
+    <div class="modal-content" id="modal-content">
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modales = document.querySelectorAll('.modal');
+            M.Modal.init(modales);
+        });
+
+        document.querySelectorAll('.edit-button').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                fetch(`/Categoria/Edit/${id}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+                        M.updateTextFields(); 
+                    });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.delete').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const id = this.dataset.id;
+                    if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
+                        fetch(`/Categoria/Eliminar/${id}`, {
+                            method: 'POST'
+                        })
+                        .then(res => {
+                            if (res.ok) {
+                                location.reload();
+                            } else {
+                                return res.text().then(msg => { throw new Error(msg); });
+                            }
+                        })
+                        .catch(error => {
+                            alert(error.message);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
+   
+}

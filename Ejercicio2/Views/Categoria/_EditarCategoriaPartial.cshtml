@@ -1,0 +1,34 @@
+﻿@model Ejercicio2.Models.Categoria
+
+<form id="editarProductoForm" method="post" action="@Url.Action("EditarPost", "Categoria")">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="input-field">
+        <input name="Nombre" id="nombre" type="text" value="@Model.Nombre" />
+        <label for="nombre" class="active">Nombre</label>
+    </div>
+
+    <div class="input-field">
+        <input name="FechaCreacion" id="fechaCreacion" type="date" value="@Model.FechaCreacion.ToString("yyyy-MM-dd")" />
+        <label for="fechaCreacion" class="active">Fecha Creacion</label>
+    </div>
+
+    <div class="right-align">
+        <button class="btn blue" type="submit">Guardar</button>
+    </div>
+</form>
+
+<script>
+   
+    document.getElementById('editarCategoriaForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/Categoria/EditarPost', {
+            method: 'POST',
+            body: formData
+        })
+        .then(() => location.reload()); 
+    });
+</script>

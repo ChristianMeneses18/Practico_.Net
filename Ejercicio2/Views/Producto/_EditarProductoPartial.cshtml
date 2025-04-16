@@ -1,0 +1,49 @@
+﻿@model Ejercicio2.Models.Producto
+
+<form id="editarProductoForm" method="post" action="@Url.Action("EditarPost", "Producto")">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <!-- Nombre del producto -->
+    <div class="input-field">
+        <input name="Nombre" id="nombre" type="text" value="@Model.Nombre" />
+        <label for="nombre" class="active">Nombre</label>
+    </div>
+
+    <!-- Precio del producto -->
+    <div class="input-field">
+        <input asp-for="Precio" id="precio" type="number" step="0.01" class="validate" />
+        <label for="precio" class="active">Precio</label>
+        <span asp-validation-for="Precio" class="red-text text-darken-1"></span>
+    </div>
+    <!-- Fecha Alta -->
+    <div class="input-field">
+        <input name="FechaAlta" id="fechaAlta" type="date" value="@Model.FechaAlta.ToString("yyyy-MM-dd")" />
+        <label for="fechaAlta" class="active">Fecha Alta</label>
+    </div>
+
+    <div class="input-field">
+        <label asp-for="CategoriaId" class="active">Categoría</label>
+        <select asp-for="CategoriaId" asp-items="ViewBag.Categorias" class="browser-default">
+            <option value="">Seleccione</option>
+        </select>
+        <span asp-validation-for="CategoriaId" class="text-danger"></span>
+    </div>
+
+    <div class="right-align">
+        <button class="btn blue" type="submit">Guardar</button>
+    </div>
+</form>
+
+<script>
+    document.getElementById('editarProductoForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/Producto/EditarPost', {
+            method: 'POST',
+            body: formData
+        })
+        .then(() => location.reload()); 
+    });
+</script>

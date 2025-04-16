@@ -1,0 +1,98 @@
+﻿@model List<Ejercicio2.Models.Categoria>
+
+<div class="container">
+    <h4 class="center-align">Categorías</h4>
+
+    <!-- Botón para agregar -->
+    <div class="right-align" style="margin-bottom: 1rem;">
+        <a asp-action="Create" class="btn waves-effect waves-light blue lighten-1">
+            <i class="material-icons left">add</i>Agregar categoría
+        </a>
+    </div>
+
+    <!-- Card con la tabla -->
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Listado de Categorías</span>
+
+            <table class="striped highlight responsive-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Fecha de Creacion</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cat in Model)
+                    {
+                        <tr>
+                            <td>@cat.Id</td>
+                            <td>@cat.Nombre</td>
+                            <td>@cat.FechaCreacion</td>
+                            <td>
+                                <a class="btn-small orange modal-trigger edit-button" href="#modalEditar" data-id="@cat.Id"> <i class="material-icons">edit</i></a>
+                            </td>
+                            <td>
+                                <a class="btn-small red delete" data-id="@cat.Id"><i class="material-icons">delete</i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditar" class="modal">
+    <div class="modal-content" id="modal-content">
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modales = document.querySelectorAll('.modal');
+            M.Modal.init(modales);
+        });
+
+        document.querySelectorAll('.edit-button').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                fetch(`/Categoria/Edit/${id}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+                        M.updateTextFields(); 
+                    });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.delete').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const id = this.dataset.id;
+                    if (confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
+                        fetch(`/Categoria/Eliminar/${id}`, {
+                            method: 'POST'
+                        })
+                        .then(res => {
+                            if (res.ok) {
+                                location.reload();
+                            } else {
+                                return res.text().then(msg => { throw new Error(msg); });
+                            }
+                        })
+                        .catch(error => {
+                            alert(error.message);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
+   
+}

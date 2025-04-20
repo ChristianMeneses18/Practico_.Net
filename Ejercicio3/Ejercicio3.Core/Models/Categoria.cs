@@ -9,7 +9,6 @@ namespace Ejercicio3.Core.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Nombre { get; set; }
-
         public DateOnly FechaCreacion { get; set; }
 
         public Categoria() { }

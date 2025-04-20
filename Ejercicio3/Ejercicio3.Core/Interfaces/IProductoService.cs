@@ -11,8 +11,8 @@ namespace Ejercicio3.Core.Interfaces
     {
         IEnumerable<Producto> GetAllProductos();
         Producto GetProductoById(int id);
-        void AddProducto(Producto producto);
-        void UpdateProducto(Producto producto);
+        Producto AddProducto(Producto producto);
+        Producto UpdateProducto(Producto producto);
         void EliminarProducto(int id);
     }
 }

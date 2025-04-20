@@ -27,22 +27,34 @@ namespace Ejercicio3.Services.Services
             return _productoRepository.GetById(id);
         }
 
-        public void Add(Producto producto)
+        public Producto AddProducto(Producto producto)
         {
             _productoRepository.Add(producto);
+            return producto;
         }
 
-        public void Update(Producto producto)
+        public Producto UpdateProducto(Producto producto)
         {
-            _productoRepository.Update(producto);
+            var existente = _productoRepository.GetById(producto.Id);
+            if (existente == null)
+                return null;
+
+            existente.Nombre = producto.Nombre;
+            existente.Precio = producto.Precio;
+            existente.FechaAlta = producto.FechaAlta;
+            existente.CategoriaId = producto.CategoriaId;
+
+            _productoRepository.Update(existente);
+            return existente;
         }
 
-        public void Delete(int id)
+
+        public void EliminarProducto(int id)
         {
             var producto = _productoRepository.GetById(id);
             if (producto != null)
             {
-                _productoRepository.Delete(id)
+                _productoRepository.Delete(producto);
             }
         }
     }

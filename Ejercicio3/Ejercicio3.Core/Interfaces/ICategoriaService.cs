@@ -11,8 +11,8 @@ namespace Ejercicio3.Core.Interfaces
     {
         IEnumerable<Categoria> GetAllCategorias();
         Categoria? GetCategoriaById(int id);
-        void AddCategoria(Categoria categoria);
-        void UpdateCategoria(Categoria categoria);
+        Categoria AddCategoria(Categoria categoria);
+        Categoria UpdateCategoria(Categoria categoria);
         void EliminarCategoria(int id);
     }
 }

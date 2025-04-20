@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ejercicio3.Core.Interfaces;
 using Ejercicio3.Core.Models;
 using Ejercicio3.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ejercicio3.Data.Repositories
 {
@@ -25,7 +26,7 @@ namespace Ejercicio3.Data.Repositories
 
         public Producto? GetById(int id)
         {
-            return _context.Productos.Find(id);
+            return _context.Productos.Include(p => p.Categoria).FirstOrDefault(p => p.Id == id);
         }
 
         public void Add(Producto producto)

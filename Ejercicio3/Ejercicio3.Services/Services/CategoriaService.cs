@@ -29,17 +29,27 @@ namespace Ejercicio3.Services.Services
             return _categoriaRepository.GetById(id);
         }
 
-        public void AddCategoria(Categoria categoria)
+        public Categoria AddCategoria(Categoria categoria)
         {
-             _categoriaRepository.Add(categoria);
+            _categoriaRepository.Add(categoria);
+            return categoria;
         }
 
-        public void Update(Categoria categoria)
+        public Categoria UpdateCategoria(Categoria categoria)
         {
-            _categoriaRepository.Update(categoria);
+            var existente = _categoriaRepository.GetById(categoria.Id);
+            if (existente == null)
+                return null;
+
+            existente.Nombre = categoria.Nombre;
+            existente.FechaCreacion = categoria.FechaCreacion;
+
+            _categoriaRepository.Update(existente);
+            return existente;
+
         }
 
-        public void Delete(int id)
+        public void EliminarCategoria(int id)
         {
             var categoria = _categoriaRepository.GetById(id);
             if (categoria == null)

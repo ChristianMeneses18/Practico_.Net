@@ -5,6 +5,7 @@ using Ejercicio3.Data.Context;
 using Ejercicio3.Data.Repositories;
 using Ejercicio3.Services.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,21 @@ builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API REST EJERICIO 3 PRACTICO .NET",
+        Version = "v1",
+        Description = "Esta es una api que implementa los metodos para realizar un crud de categorias y productos",
+        Contact = new OpenApiContact
+        {
+            Name = "Christian Meneses",
+            Email = "christianmeneses617@gmail.com"
+        }
+    });
+    options.EnableAnnotations();
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

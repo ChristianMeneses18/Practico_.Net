@@ -4,6 +4,7 @@ using Ejercicio3.Core.Interfaces;
 using Ejercicio3.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Ejercicio3.API.Controllers
 {
@@ -22,6 +23,8 @@ namespace Ejercicio3.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Obtener todos los productos", Description = "Devuelve una lista de todos los productos disponibles.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lista de productos obtenida correctamente", typeof(IEnumerable<ProductoDto>))]
         public ActionResult<IEnumerable<ProductoDto>> GetAll()
         {
             var productos = _productoService.GetAllProductos();
@@ -30,6 +33,9 @@ namespace Ejercicio3.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Obtener producto por ID", Description = "Devuelve un producto específico usando su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Producto encontrado", typeof(ProductoDto))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Producto no encontrado")]
         public ActionResult<ProductoDto> GetById(int id)
         {
             var producto = _productoService.GetProductoById(id);
@@ -41,6 +47,9 @@ namespace Ejercicio3.API.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Crear un nuevo producto", Description = "Crea un nuevo producto en la base de datos")]
+        [SwaggerResponse(200, "Producto creado correctamente", typeof(Producto))]
+        [SwaggerResponse(400, "Datos de entrada incorrectos")]
         public ActionResult<ProductoDto> Create([FromBody] ProductoCreateDto createDto)
         {
             var producto = _mapper.Map<Producto>(createDto);
@@ -51,6 +60,10 @@ namespace Ejercicio3.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Actualizar un producto", Description = "Actualiza los datos de un producto existente.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Producto actualizado correctamente", typeof(ProductoDto))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "ID no coincide o datos inválidos")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Producto no encontrado")]
         public ActionResult<ProductoDto> Update(int id, [FromBody] ProductoUpdateDto updateDto)
         {
             if (id != updateDto.Id)
@@ -67,6 +80,9 @@ namespace Ejercicio3.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Eliminar un producto", Description = "Elimina un producto existente por su ID.")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Producto eliminado correctamente")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Producto no encontrado")]
         public ActionResult Delete(int id)
         {
             var producto = _productoService.GetProductoById(id);

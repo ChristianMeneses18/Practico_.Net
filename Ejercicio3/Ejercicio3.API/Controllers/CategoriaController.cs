@@ -4,6 +4,7 @@ using Ejercicio3.Core.Interfaces;
 using Ejercicio3.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Ejercicio3.API.Controllers
 {
@@ -14,15 +15,15 @@ namespace Ejercicio3.API.Controllers
         private readonly ICategoriaService _categoriaService;
         private readonly IMapper _mapper;
 
-        // Inyección de dependencias
         public CategoriaController(ICategoriaService categoriaService, IMapper mapper)
         {
             _categoriaService = categoriaService;
             _mapper = mapper;
         }
 
-        // GET api/categoria
         [HttpGet]
+        [SwaggerOperation(Summary = "Obtener todas las categorias", Description = "Devuelve una lista de todas las categorias disponibles.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lista de categorias obtenida correctamente", typeof(IEnumerable<CategoriaDto>))]
         public ActionResult<IEnumerable<CategoriaDto>> GetAll()
         {
             var categorias = _categoriaService.GetAllCategorias();
@@ -30,8 +31,10 @@ namespace Ejercicio3.API.Controllers
             return Ok(categoriasDto);
         }
 
-        // GET api/categoria/{id}
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Obtener categoria por ID", Description = "Devuelve una categoria específica usando su ID.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Categoria encontrada", typeof(CategoriaDto))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Categoria no encontrada")]
         public ActionResult<CategoriaDto> GetById(int id)
         {
             var categoria = _categoriaService.GetCategoriaById(id);
@@ -42,8 +45,10 @@ namespace Ejercicio3.API.Controllers
             return Ok(categoriaDto);
         }
 
-        // POST api/categoria
         [HttpPost]
+        [SwaggerOperation(Summary = "Crear una nueva categoria", Description = "Crea una nueva categoria en la base de datos")]
+        [SwaggerResponse(200, "Categoria creada correctamente", typeof(Categoria))]
+        [SwaggerResponse(400, "Datos de entrada incorrectos")]
         public ActionResult<CategoriaDto> Create([FromBody] CategoriaCreateDto createDto)
         {
             var categoria = _mapper.Map<Categoria>(createDto);
@@ -53,8 +58,11 @@ namespace Ejercicio3.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = categoriaDto.Id }, categoriaDto);
         }
 
-        // PUT api/categoria/{id}
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Actualizar una categoria", Description = "Actualiza los datos de una categoria existente.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Categoria actualizado correctamente", typeof(CategoriaDto))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "ID no coincide o datos inválidos")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Categoria no encontrada")]
         public ActionResult<CategoriaDto> Update(int id, [FromBody] CategoriaUpdateDto updateDto)
         {
             if (id != updateDto.Id)
@@ -70,8 +78,11 @@ namespace Ejercicio3.API.Controllers
             return Ok(categoriaDto);
         }
 
-        // DELETE api/categoria/{id}
+        
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Eliminar una categoria", Description = "Elimina una categoria existente por su ID.")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Categoria eliminada correctamente")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Categoria no encontrada")]
         public ActionResult Delete(int id)
         {
             try

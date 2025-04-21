@@ -9,7 +9,11 @@ namespace Ejercicio3.API.Mappings
         public MappingProfile() 
         {
             CreateMap<Producto, ProductoDto>().ReverseMap();
+            CreateMap<ProductoCreateDto, Producto>();
+            CreateMap<ProductoUpdateDto, Producto>();
             CreateMap<Categoria, CategoriaDto>().ReverseMap();
+            CreateMap<CategoriaCreateDto, Categoria>();
+            CreateMap<CategoriaUpdateDto, Categoria>();
         }
 
     }
